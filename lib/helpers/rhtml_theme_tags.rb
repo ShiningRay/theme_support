@@ -16,10 +16,10 @@ module ActionView::Helpers::AssetTagHelper
    end
 
    # returns the path to a theme javascript
-   def theme_javascript_path( source, theme=nil )
-      theme = theme || controller.current_theme
-      compute_public_path(source, "themes/#{theme}/javascript", 'js')
-   end
+   # def theme_javascript_path( source, theme=nil )
+   #   theme = theme || controller.current_theme
+   #   compute_public_path(source, "themes/#{theme}/javascript", 'js')
+   # end
 
    # This tag it will automatially include theme specific css files
    def theme_stylesheet_link_tag(*sources)
@@ -46,7 +46,6 @@ module ActionView::Helpers::AssetTagHelper
    
    # This tag can be used to return theme specific javascript files
    def theme_javascript_include_tag(*sources)
-     options = sources.last.is_a?(Hash) ? sources.pop.stringify_keys : { }
 
      if sources.include?(:defaults)        
        pre_default_sources = sources[0..(sources.index(:defaults))]
@@ -56,8 +55,8 @@ module ActionView::Helpers::AssetTagHelper
        
        sources << "application" if defined?(Rails.root) && File.exists?("#{Rails.root}/public/javascripts/application.js") 
      end
-
-     themed_sources = sources.collect { |source| theme_javascript_path(source) }
+     
+     themed_sources = sources.collect { |source| compute_public_path(source, "themes/#{controller.current_theme}/javascripts", 'js') }
      javascript_include_tag(themed_sources)
    end
 
