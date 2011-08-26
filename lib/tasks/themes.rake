@@ -11,7 +11,7 @@ namespace :themes do
         
         FileUtils.cp_r "#{theme}/images", "#{RAILS_ROOT}/public/themes/#{theme_name}/images", :verbose => true
         FileUtils.cp_r "#{theme}/stylesheets", "#{RAILS_ROOT}/public/themes/#{theme_name}/stylesheets", :verbose => true
-        FileUtils.cp_r "#{theme}/javascript", "#{RAILS_ROOT}/public/themes/#{theme_name}/javascript", :verbose => true
+        FileUtils.cp_r "#{theme}/javascripts", "#{RAILS_ROOT}/public/themes/#{theme_name}/javascripts", :verbose => true
       end
     end
 
