@@ -1,14 +1,13 @@
 # The controller for serving/cacheing theme content...
-#
 class ThemeController < ActionController::Base
-
-  after_filter :cache_theme_files
+  #class_inheritable_attribute
+  caches_pages :stylesheets, :javascripts, :images
   
   def stylesheets
     render_theme_item(:stylesheets, joined_filename, params[:theme], 'text/css')
   end
-
-  def javascript
+  
+  def javascripts
     render_theme_item(:javascripts, joined_filename, params[:theme], 'text/javascript')
   end
 
@@ -28,21 +27,14 @@ class ThemeController < ActionController::Base
       render :text => "Not Found", :status => 404
       return
     else
-      send_file file_path, :type => mime, :disposition => 'inline', :stream => false
+      if stale?(:last_modified => File.mtime(file_path), :public => true)
+        send_file file_path, :type => mime, :disposition => 'inline'#, :stream => false
+      end
     end
   end
   
   def joined_filename
     params[:filename].join '/'
-  end
-
-  def cache_theme_files
-    path = request.request_uri
-    begin
-      ThemeController.cache_page( response.body, path )
-    rescue
-      STERR.puts "Cache Exception: #{$!}"
-    end
   end
 
   def mime_for(filename)
@@ -63,7 +55,6 @@ class ThemeController < ActionController::Base
       'application/binary'
     end
   end  
-
 end
 
 

@@ -16,5 +16,3 @@ module ThemeSupport
     end
   end
 end
-
-ActionController::Routing::RouteSet::Mapper.send :include, ThemeSupport::RoutingExtensions
